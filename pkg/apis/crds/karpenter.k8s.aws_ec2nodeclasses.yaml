@@ -4,25 +4,25 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: ec2nodeclasses.karpenter.k8s.aws
+  name: ec2nodeclasskarpenterflavors.karpenterflavor.k8s.aws
 spec:
-  group: karpenter.k8s.aws
+  group: karpenterflavor.k8s.aws
   names:
     categories:
-    - karpenter
-    kind: EC2NodeClass
-    listKind: EC2NodeClassList
-    plural: ec2nodeclasses
+    - karpenterflavor
+    kind: EC2NodeClassKarpenterFlavor
+    listKind: EC2NodeClassKarpenterFlavorList
+    plural: ec2nodeclasskarpenterflavors
     shortNames:
-    - ec2nc
-    - ec2ncs
-    singular: ec2nodeclass
+    - ec2nckf
+    - ec2ncskf
+    singular: ec2nodeclasskarpenterflavor
   scope: Cluster
   versions:
-  - name: v1beta1
+  - name: v1beta1-kf
     schema:
       openAPIV3Schema:
-        description: EC2NodeClass is the Schema for the EC2NodeClass API
+        description: EC2NodeClassKarpenterFlavor is the Schema for the EC2NodeClassKarpenterFlavor API
         properties:
           apiVersion:
             description: |-
@@ -43,7 +43,7 @@ spec:
             type: object
           spec:
             description: |-
-              EC2NodeClassSpec is the top level specification for the AWS Karpenter Provider.
+              EC2NodeClassKarpenterFlavorSpec is the top level specification for the AWS Karpenter Provider.
               This will contain configuration necessary to launch instances in AWS.
             properties:
               amiFamily:
@@ -425,14 +425,14 @@ spec:
                   rule: self.all(k, k != '')
                 - message: tag contains a restricted tag matching kubernetes.io/cluster/
                   rule: self.all(k, !k.startsWith('kubernetes.io/cluster') )
-                - message: tag contains a restricted tag matching karpenter.sh/nodepool
-                  rule: self.all(k, k != 'karpenter.sh/nodepool')
-                - message: tag contains a restricted tag matching karpenter.sh/managed-by
-                  rule: self.all(k, k !='karpenter.sh/managed-by')
-                - message: tag contains a restricted tag matching karpenter.sh/nodeclaim
-                  rule: self.all(k, k !='karpenter.sh/nodeclaim')
-                - message: tag contains a restricted tag matching karpenter.k8s.aws/ec2nodeclass
-                  rule: self.all(k, k !='karpenter.k8s.aws/ec2nodeclass')
+                - message: tag contains a restricted tag matching karpenterflavor.sh/nodepool
+                  rule: self.all(k, k != 'karpenterflavor.sh/nodepool')
+                - message: tag contains a restricted tag matching karpenterflavor.sh/managed-by
+                  rule: self.all(k, k !='karpenterflavor.sh/managed-by')
+                - message: tag contains a restricted tag matching karpenterflavor.sh/nodeclaim
+                  rule: self.all(k, k !='karpenterflavor.sh/nodeclaim')
+                - message: tag contains a restricted tag matching karpenterflavor.k8s.aws/ec2nodeclasskarpenterflavor
+                  rule: self.all(k, k !='karpenterflavor.k8s.aws/ec2nodeclasskarpenterflavor')
               userData:
                 description: |-
                   UserData to be applied to the provisioned nodes.
@@ -457,7 +457,7 @@ spec:
               rule: (has(oldSelf.role) && has(self.role)) || (has(oldSelf.instanceProfile)
                 && has(self.instanceProfile))
           status:
-            description: EC2NodeClassStatus contains the resolved state of the EC2NodeClass
+            description: EC2NodeClassKarpenterFlavorStatus contains the resolved state of the EC2NodeClassKarpenterFlavor
             properties:
               amis:
                 description: |-
